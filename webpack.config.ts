@@ -1,6 +1,7 @@
 import type webpack from "webpack";
 import path from "path";
 import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
+import BundleDeclarationsWebpackPlugin from "bundle-declarations-webpack-plugin";
 
 // Needed to use build-std on stable rust
 process.env.RUSTC_BOOTSTRAP = "1";
@@ -11,7 +12,7 @@ export default {
   entry: "./src/index.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.mjs",
+    filename: "index.mjs",
     clean: true,
 
     library: {
@@ -37,6 +38,7 @@ export default {
       extraArgs:
         "--no-pack --target bundler . -Z build-std=panic_abort,std -Z build-std-features=panic_immediate_abort",
     }),
+    new BundleDeclarationsWebpackPlugin(),
   ],
 
   experiments: {
