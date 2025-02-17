@@ -6,5 +6,10 @@
     "esModuleInterop": true,
     "verbatimModuleSyntax": false
   },
+  "ts-node": {
+    "moduleTypes": {
+      "webpack.config.ts": "cjs"
+    }
+  },
   "include": ["webpack.config.ts"]
 }
