@@ -1,0 +1,37 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "incremental": true,
+      "isolatedModules": true,
+      "lib": ["ESNext", "DOM", "DOM.Iterable"],
+      "module": "ESNext",
+      "moduleDetection": "force",
+      "moduleResolution": "Bundler",
+  
+      "strict": true,
+      "strictNullChecks": true,
+  
+      "noImplicitReturns": true,
+      "noUncheckedIndexedAccess": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitOverride": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      "disableSourceOfProjectReferenceRedirect": true,
+  
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "checkJs": true,
+      "verbatimModuleSyntax": true,
+      "target": "ES2022"
+    },
+    "mdx": {
+      "checkMdx": true
+    },
+    "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
+  }
+  

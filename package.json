@@ -1,0 +1,23 @@
+{
+  "name": "@openrouter/markdown-wasm",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
+  "module": "dist/main.mjs",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack-config.json\" webpack --config webpack.config.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/webpack": "^5.28.5",
+    "@wasm-tool/wasm-pack-plugin": "^1.7.0",
+    "cross-env": "^7.0.3",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  }
+}

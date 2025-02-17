@@ -1,0 +1,29 @@
+[package]
+name = "openrouter-markdown"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+lazy_static = "1.5.0"
+pulldown-cmark = { version = "0.12.2", default-features = false, features = ["html"] }
+pulldown-cmark-escape = "0.11.0"
+regex-lite = "0.1.6"
+wasm-bindgen = "0.2.100"
+serde = { version = "1.0", features = ["derive"] }
+serde-wasm-bindgen = "0.4"
+
+[profile.release]
+opt-level = "s"
+strip = false
+lto = true
+panic = "abort"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ['-Os']
+
+[workspace]
+resolver = "2"
