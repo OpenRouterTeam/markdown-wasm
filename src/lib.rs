@@ -20,7 +20,9 @@ pub struct MarkdownRenderOptions {
 
 #[wasm_bindgen]
 pub fn markdown_to_html(markdown: &str, options: JsValue) -> Option<String> {
-    let options: MarkdownRenderOptions = serde_wasm_bindgen::from_value(options).unwrap();
+    let Ok(options) = serde_wasm_bindgen::from_value(options) else {
+        return None;
+    };
 
     let parser_options = Options::ENABLE_TABLES
         | Options::ENABLE_TASKLISTS
@@ -223,7 +225,7 @@ impl FilteringIterator<'_> {
     ) -> Result<(), O::Error> {
         write!(output, " ")?;
         escape_html(&mut *output, k)?;
-        write!(output, r#"""#)?;
+        write!(output, r#"=""#)?;
         escape_html(&mut *output, v)?;
         write!(output, r#"""#)?;
         Ok(())
