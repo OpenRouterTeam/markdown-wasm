@@ -9,6 +9,10 @@
   "scripts": {
     "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack-config.json\" webpack --config webpack.config.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenRouterTeam/markdown-wasm.git"
+  },
   "devDependencies": {
     "@types/node": "^22.13.4",
     "@types/webpack": "^5.28.5",

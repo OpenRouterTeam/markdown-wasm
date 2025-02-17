@@ -3,3 +3,4 @@
 # https://github.com/rustwasm/wasm-bindgen/issues/4211
 channel = "1.81.0"
 targets = ["wasm32-unknown-unknown"]
+components = ["rust-src"]
