@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { markdownToHtml } from ".";
+import { markdownToHtml } from "../dist";
 
 test("adds attributes to links", async () => {
   const html = await markdownToHtml("[link](/here)", {

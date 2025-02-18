@@ -1,15 +1,22 @@
 {
   "name": "@openrouter/markdown-wasm",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
   "type": "module",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "/dist"
   ],
   "scripts": {
-    "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack-config.json\" webpack --config webpack.config.ts"
+    "build": "cross-env RUSTC_BOOTSTRAP=1 wasm-pack build --out-dir dist --out-name index --release --no-pack --target bundler . -Z build-std=panic_abort,std -Z build-std-features=panic_immediate_abort",
+    "test": "pnpm build && vitest run"
   },
   "repository": {
     "type": "git",
@@ -17,17 +24,12 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
-    "@types/webpack": "^5.28.5",
-    "@wasm-tool/wasm-pack-plugin": "^1.7.0",
-    "bundle-declarations-webpack-plugin": "^5.1.1",
     "cross-env": "^7.0.3",
-    "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1",
     "vitest": "^3.0.5",
-    "webpack": "^5.98.0",
-    "webpack-cli": "^6.0.1"
+    "wasm-pack": "^0.13.1"
   }
 }

@@ -4,26 +4,28 @@ use pulldown_cmark_escape::{escape_href, escape_html, escape_html_body_text};
 use regex_lite::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
-use wasm_bindgen::prelude::*;
+use tsify::Tsify;
+use wasm_bindgen::{convert::IntoWasmAbi, describe::WasmDescribe, prelude::*};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Tsify, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
+#[tsify(from_wasm_abi)]
 pub struct MarkdownRenderOptions {
     #[serde(default)]
+    #[tsify(type = "Record<string, string>")]
     pub link_attributes: BTreeMap<String, String>,
 
     #[serde(default)]
+    #[tsify(type = "Record<string, string>")]
     pub external_link_attributes: BTreeMap<String, String>,
 
+    #[serde(default)]
     pub external_link_icon_html: Option<String>,
 }
 
-#[wasm_bindgen]
-pub fn markdown_to_html(markdown: &str, options: JsValue) -> Option<String> {
-    let Ok(options) = serde_wasm_bindgen::from_value(options) else {
-        return None;
-    };
-
+#[wasm_bindgen(js_name = markdownToHtml)]
+pub fn markdown_to_html(markdown: &str, options: Option<MarkdownRenderOptions>) -> JsValue {
+    let options = options.unwrap_or_default();
     let parser_options = Options::ENABLE_TABLES
         | Options::ENABLE_TASKLISTS
         | Options::ENABLE_STRIKETHROUGH
@@ -42,13 +44,13 @@ pub fn markdown_to_html(markdown: &str, options: JsValue) -> Option<String> {
     };
 
     if let Err(_) = pulldown_cmark::html::write_html_fmt(&mut output, &mut iter) {
-        return None;
+        return JsValue::null();
     }
 
     if iter.aborted {
-        None
+        JsValue::null()
     } else {
-        Some(output)
+        output.into()
     }
 }
 
