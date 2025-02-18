@@ -1,6 +1,6 @@
 {
   "name": "@openrouter/markdown-wasm",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
   "type": "module",
   "module": "./dist/index.js",
@@ -15,7 +15,7 @@
     "/dist"
   ],
   "scripts": {
-    "build": "cross-env RUSTC_BOOTSTRAP=1 wasm-pack build --out-dir dist --out-name index --release --no-pack --target bundler . -Z build-std=panic_abort,std -Z build-std-features=panic_immediate_abort",
+    "build": "cross-env RUSTC_BOOTSTRAP=1 wasm-pack build --out-dir dist --out-name index --release --no-pack --target bundler . -Z build-std=panic_abort,std -Z build-std-features=panic_immediate_abort && rm dist/.gitignore",
     "test": "pnpm build && vitest run"
   },
   "repository": {
