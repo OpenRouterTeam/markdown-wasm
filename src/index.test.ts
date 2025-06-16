@@ -4,6 +4,7 @@ import { markdownToHtml } from "../dist";
 
 test("adds attributes to links", async () => {
   const html = await markdownToHtml("[link](/here)", {
+    allowInternalLinks: true,
     linkAttributes: { class: "someclass" },
   });
 
@@ -23,6 +24,7 @@ test("adds extra attributes to external links", async () => {
 
 test("doesn't add extra attributes to internal links", async () => {
   const html = await markdownToHtml("[link](/here)", {
+    allowInternalLinks: true,
     linkAttributes: { class: "someclass" },
     externalLinkAttributes: { rel: "noopener noreferrer" },
   });
@@ -44,6 +46,7 @@ test("adds icon to external links", async () => {
 
 test("doesn't add icon to internal links", async () => {
   const html = await markdownToHtml("[link](/here)", {
+    allowInternalLinks: true,
     linkAttributes: { class: "someclass" },
     externalLinkAttributes: { rel: "noopener noreferrer" },
     externalLinkIconHtml: "<svg></svg>",
@@ -75,3 +78,33 @@ test("aborts on img tags", async () => {
 
   expect(html).toBe(null);
 });
+
+test("aborts on javascript: links in markdown", async () => {
+  const html = await markdownToHtml(`[evil](javascript:alert(self))`, { allowInternalLinks: true });
+
+  expect(html).toBe(null);
+});
+
+test("aborts on javascript: links in <a> tags", async () => {
+  const html = await markdownToHtml(`<a href="javascript:alert('hello')">evil</a>`, { allowInternalLinks: true });
+
+  expect(html).toBe(null);
+});
+
+test("denys internal links by default", async () => {
+  const html = await markdownToHtml("[link](/here)", {
+    linkAttributes: { class: "someclass" },
+  });
+
+  expect(html).toBe(null)
+});
+
+test("denys internal links if requested", async () => {
+  const html = await markdownToHtml("[link](/here)", {
+    allowInternalLinks: false,
+    linkAttributes: { class: "someclass" },
+  });
+
+  expect(html).toBe(null)
+});
+

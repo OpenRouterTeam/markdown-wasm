@@ -5,12 +5,15 @@ use regex_lite::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use tsify::Tsify;
-use wasm_bindgen::{convert::IntoWasmAbi, describe::WasmDescribe, prelude::*};
+use wasm_bindgen::{prelude::*};
 
 #[derive(Tsify, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 #[tsify(from_wasm_abi)]
 pub struct MarkdownRenderOptions {
+    #[serde(default)]
+    pub allow_internal_links: bool,
+
     #[serde(default)]
     #[tsify(type = "Record<string, string>")]
     pub link_attributes: BTreeMap<String, String>,
@@ -181,7 +184,17 @@ impl FilteringIterator<'_> {
     where
         O::Error: Default,
     {
-        let is_external = dest_url.starts_with("http");
+        let is_external = dest_url.starts_with("http://") || dest_url.starts_with("https://");
+
+        let has_protocol_scheme = HAS_PROTOCOL_SCHEME_REGEX.is_match(dest_url);
+        if has_protocol_scheme && !is_external {
+            // Disallow `javascript:`, `tel:` etc. as well as custom protocol schemes
+            return Err(O::Error::default());
+        }
+
+        if !is_external && !self.options.allow_internal_links {
+            return Err(O::Error::default());
+        }
 
         write!(output, r#"<a href=""#)?;
         if let Err(_) = escape_href(&mut *output, &dest_url) {
@@ -238,4 +251,8 @@ lazy_static! {
     static ref AUTOLINK_REGEX: Regex = Regex::new(
         r#"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"#
     ).unwrap();
+}
+
+lazy_static! {
+    static ref HAS_PROTOCOL_SCHEME_REGEX: Regex = Regex::new(r#"^(.*)\:"#).unwrap();
 }
